@@ -6,6 +6,8 @@ class PhlexNestedNameComponent < Phlex::Component
   end
 
   def template
-    p "nested hello #{@name}"
+    10.times do
+      p "nested hello #{@name}"
+    end
   end
 end

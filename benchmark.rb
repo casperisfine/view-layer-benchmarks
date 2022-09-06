@@ -51,6 +51,8 @@ class NameObj
   end
 end
 
+puts "Rendering #{PhlexNameComponent.new(name: "Fox Mulder").call.bytesize} bytes"
+
 Benchmark.ips do |x|
   x.time = 10
   x.warmup = 2
