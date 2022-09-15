@@ -54,14 +54,11 @@ end
 puts "Rendering #{PhlexNameComponent.new(name: "Fox Mulder").call.bytesize} bytes"
 
 Benchmark.ips do |x|
-  x.time = 10
-  x.warmup = 2
-
-  x.report("view_component") { controller_view.render(NameComponent.new(name: "Fox Mulder")) }
-  x.report("partials") { controller_view.render("/name", name: "Fox Mulder") }
-  x.report("cells") { controller_view.render(html: Name::Cell.new(NameObj.new("Fox Mulder")).()) }
-  x.report("dry_view") { controller_view.render(html: Name::View.new.call(name: "Fox Mulder").to_s)  }
-  x.report("phlex") { controller_view.render(PhlexNameComponent.new(name: "Fox Mulder")) }
+  x.report("view_component") { controller_view.render(NameComponent.new(name: "Fox Mulder #{rand}")) }
+  x.report("partials") { controller_view.render("/name", name: "Fox Mulder #{rand}") }
+  x.report("cells") { controller_view.render(html: Name::Cell.new(NameObj.new("Fox Mulder #{rand}")).()) }
+  x.report("dry_view") { controller_view.render(html: Name::View.new.call(name: "Fox Mulder #{rand}").to_s)  }
+  x.report("phlex") { controller_view.render(PhlexNameComponent.new(name: "Fox Mulder #{rand}")) }
 
   x.compare!
 end
