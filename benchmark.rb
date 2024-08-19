@@ -10,29 +10,30 @@ require "benchmark/ips"
 # Configure Rails Environment
 ENV["RAILS_ENV"] = "production"
 
-
 class TestApp < Rails::Application
   config.root = __dir__
   config.hosts << "example.org"
   config.session_store :cookie_store, key: "cookie_store_key"
-  secrets.secret_key_base = "secret_key_base"
+  config.secret_key_base = "secret_key_base"
 
-  config.logger = Logger.new($stdout)
+  config.logger = Logger.new(nil)
+  config.logger.level = Logger::INFO
   Rails.logger  = config.logger
 end
 
-class Cell::ViewModel
-  self.view_paths = ["cells"]
-end
+# class Cell::ViewModel
+#   self.view_paths = ["cells"]
+# end
 
+require "phlex-rails"
 require_relative "./components/name_component"
 require_relative "./components/nested_name_component"
 
-require_relative "./cells/name/cell"
-require_relative "./cells/nested_name/cell"
-
-require_relative "./dry-views/name/view"
-require_relative "./dry-views/nested_name/view"
+# require_relative "./cells/name/cell"
+# require_relative "./cells/nested_name/cell"
+#
+# require_relative "./dry-views/name/view"
+# require_relative "./dry-views/nested_name/view"
 
 require_relative "./phlex/phlex_name_component"
 require_relative "./phlex/phlex_nested_name_component"
@@ -49,16 +50,20 @@ class NameObj
   def initialize(name)
     @name = name
   end
+
+  def to_partial_path
+    "name"
+  end
 end
 
 puts "Rendering #{PhlexNameComponent.new(name: "Fox Mulder").call.bytesize} bytes"
 
 Benchmark.ips do |x|
-  x.report("view_component") { controller_view.render(NameComponent.new(name: "Fox Mulder #{rand}")) }
   x.report("partials") { controller_view.render("/name", name: "Fox Mulder #{rand}") }
-  x.report("cells") { controller_view.render(html: Name::Cell.new(NameObj.new("Fox Mulder #{rand}")).()) }
-  x.report("dry_view") { controller_view.render(html: Name::View.new.call(name: "Fox Mulder #{rand}").to_s)  }
   x.report("phlex") { controller_view.render(PhlexNameComponent.new(name: "Fox Mulder #{rand}")) }
+  # x.report("view_component") { controller_view.render(NameComponent.new(name: "Fox Mulder #{rand}")) }
+  # x.report("cells") { controller_view.render(html: Name::Cell.new(NameObj.new("Fox Mulder #{rand}")).()) }
+  # x.report("dry_view") { controller_view.render(html: Name::View.new.call(name: "Fox Mulder #{rand}").to_s)  }
 
-  x.compare!
+  x.compare!(order: :baseline)
 end

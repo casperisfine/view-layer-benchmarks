@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-class PhlexNestedNameComponent < Phlex::Component
+class PhlexNestedNameComponent < Phlex::HTML
   def initialize(name:)
     @name = name
   end
 
-  def template
+  def view_template
     10.times do
-      p "nested hello #{@name}", id: "user-#{@name}"
+      p(id: "user-#{@name}") { "nested hello #{@name}" }
     end
   end
 end
