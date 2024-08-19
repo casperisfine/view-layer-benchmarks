@@ -6,8 +6,14 @@ class PhlexNestedNameComponent < Phlex::HTML
   end
 
   def view_template
-    10.times do
-      p(id: "user-#{@name}") { "nested hello #{@name}" }
+    3.times do
+      div(class: "users") do
+        h2 { "#{@name} message" }
+        p(id: "user-#{@name}") do
+          span(class: "title") { "they:" }
+          span(class: "message") { "nested hello #{@name}" }
+        end
+      end
     end
   end
 end

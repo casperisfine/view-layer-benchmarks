@@ -56,7 +56,8 @@ class NameObj
   end
 end
 
-puts "Rendering #{PhlexNameComponent.new(name: "Fox Mulder").call.bytesize} bytes"
+puts "Rendering #{PhlexNameComponent.new(name: "Fox Mulder").call.bytesize} bytes (Phlex)"
+puts "Rendering #{controller_view.render("/name", name: "Fox Mulder").bytesize} bytes (Partials)"
 
 Benchmark.ips do |x|
   x.report("partials") { controller_view.render("/name", name: "Fox Mulder #{rand}") }

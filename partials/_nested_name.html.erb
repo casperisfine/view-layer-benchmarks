@@ -1,3 +1,9 @@
-<% 10.times do %>
-  <p id="user-<%= name %>">nested hello <%= name %></p>
+<% 3.times do %>
+  <div class="users">
+    <h2><%= name %> message</h2>
+    <p id="user-<%= name %>">
+      <span class="title">they: </span>
+      <span class="message">nested hello <%= name %></span>
+    </p>
+  </div>
 <% end %>
